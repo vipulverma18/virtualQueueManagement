@@ -9,6 +9,13 @@ export enum UserRole{
     staff="staff"
 
 }
+
+export enum Gender{
+male="male",
+female="female",
+others="others"
+}
+
 @Schema()
 export class User{
     
@@ -21,11 +28,11 @@ email:string
 @Prop({required:true,unique:true})
 phone:number
 
-@Prop({required:true})
+@Prop({required:true,enum:Gender})
 sex:string 
 
 @Prop({type:String,enum:UserRole,default:UserRole.customer})
-role:UserRole
+role:UserRole 
 
 @Prop({required:true})
 password:string
