@@ -1,7 +1,10 @@
-import { Body, Controller,Get,Post } from '@nestjs/common';
+import { Body, Controller,Get,Post, Request, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { UsersAuth } from './users-auth';
+import { UsersAuth } from '../auth/auth.service';
+import { UserSignInDto } from './dtos/user-signin.dto';
+import { AuthGuards } from 'src/auth/auth.guards';
+
 
 @Controller('users')
 export class UserController {
@@ -17,5 +20,18 @@ export class UserController {
     @Get()
     async findUser(){
         return this.userService.findAll();
+    }
+
+     @Post('/signin')
+    async userSignIn(@Body() userSignInDto:UserSignInDto){
+        const user=await this.userAuth.signin(userSignInDto.email,userSignInDto.password);
+        return user
+    }
+    @Get('/profile')
+    @UseGuards(AuthGuards)
+    async userProfile(@Request() req){
+    return req.users
+    
+        
     }
 }
